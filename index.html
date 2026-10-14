@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mecánica Rivarola - Panel de Control</title>
+    <!-- Usamos Tailwind CSS para que se vea hermoso y moderno -->
+    <script src="https://jsdelivr.net"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen font-sans">
+
+    <!-- Barra de Navegación -->
+    <nav class="bg-gray-800 p-4 border-b border-gray-700 shadow-md">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-wider text-emerald-400">⚙️ MECÁNICA RIVAROLA</h1>
+            <span class="bg-emerald-500/10 text-emerald-400 text-xs px-2.5 py-1 rounded-full border border-emerald-500/20 font-medium">Base de Datos Conectada</span>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Formulario de Ingreso de Vehículos -->
+        <section class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg md:col-span-1">
+            <h2 class="text-lg font-semibold mb-4 text-emerald-400 flex items-center gap-2">
+                📥 Registrar Ingreso
+            </h2>
+            <form class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Patente / Matrícula</label>
+                    <input type="text" placeholder="Ej: ABC 123 o AE 123 BC" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 transition-colors uppercase">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Vehículo (Marca y Modelo)</label>
+                    <input type="text" placeholder="Ej: Ford Fiesta 2018" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 transition-colors">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Nombre del Cliente</label>
+                    <input type="text" placeholder="Ej: Juan Pérez" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 transition-colors">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">Falla / Diagnóstico Inicial</label>
+                    <textarea rows="3" placeholder="Ej: Cambio de pastillas de freno y service completo..." class="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500 transition-colors resize-none"></textarea>
+                </div>
+                <button type="button" class="w-full bg-emerald-500 hover:bg-emerald-600 text-gray-900 font-bold py-2.5 px-4 rounded-lg shadow-lg hover:shadow-emerald-500/10 transition-all cursor-pointer text-center">
+                    Guardar Vehículo
+                </button>
+            </form>
+        </section>
+
+        <!-- Lista de Autos en el Taller -->
+        <section class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg md:col-span-2">
+            <h2 class="text-lg font-semibold mb-4 text-emerald-400 flex items-center gap-2">
+                🚗 Vehículos en Reparación
+            </h2>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-gray-700 text-gray-400 text-xs uppercase tracking-wider">
+                            <th class="py-3 px-4">Patente</th>
+                            <th class="py-3 px-4">Vehículo / Cliente</th>
+                            <th class="py-3 px-4">Detalle</th>
+                            <th class="py-3 px-4 text-right">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-700/50 text-sm">
+                        <!-- Ejemplo 1 -->
+                        <tr class="hover:bg-gray-750/30 transition-colors">
+                            <td class="py-4 px-4 font-mono font-bold text-amber-400 uppercase">AA 456 BB</td>
+                            <td class="py-4 px-4">
+                                <div class="font-semibold text-white">Toyota Hilux 2020</div>
+                                <div class="text-xs text-gray-400">Carlos Gómez</div>
+                            </td>
+                            <td class="py-4 px-4 text-gray-300">Pérdida de aceite y cambio de filtros.</td>
+                            <td class="py-4 px-4 text-right">
+                                <span class="bg-amber-500/10 text-amber-400 text-xs px-2.5 py-1 rounded-full border border-amber-500/20 font-medium">En Taller</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>
