@@ -43,12 +43,13 @@
 <body class="bg-gray-950 text-gray-100 min-h-screen font-sans">
 
     <!-- Barra de Navegación Premium Negro y Naranja -->
-    <nav class="bg-gray-900 p-4 border-b border-orange-600 shadow-xl">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <h1 class="text-2xl font-black tracking-widest text-orange-500 flex items-center gap-2">
-                ⚡ MECATRÓNICA RIVAROLA
-            </h1>
-            <!-- Botones de las Solapas / Menú -->
+           <div class="nav-buttons">
+            <button class="btn-orange">📥 Registrar Ingreso</button>
+            <button class="btn-gray">🚗 Turnero / Taller</button>
+            <button class="btn-gray">📋 Presupuestos</button>
+            <button class="btn-gray">💰 Control de Caja</button>
+        </div>
+
             <div class="flex flex-wrap gap-2">
                 <button class="bg-orange-600 text-black font-bold px-4 py-2 rounded-lg text-sm shadow-md hover:bg-orange-500 transition-all">📥 Registrar Ingreso</button>
                 <button class="bg-gray-800 text-gray-300 font-bold px-4 py-2 rounded-lg text-sm hover:bg-gray-700 transition-all">🚗 Turnero / Taller</button>
@@ -108,7 +109,8 @@
                         <option value="no">No, compra el taller</option>
                         <option value="si">Sí, ya los trajo en el baúl</option>
                         <option value="parcial">Trajo solo algunos</option>
-                    </select>
+                <button type="button" class="btn-submit">🚀 Guardar e Ingresar al Taller</button>
+
                 </div>
 
                 <!-- 💡 NUEVO: Control de Seña y Pagos (Tu buena idea) -->
