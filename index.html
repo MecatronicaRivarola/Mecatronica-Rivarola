@@ -282,18 +282,35 @@
 
         function enviarWhatsApp(telefono, patente, mensaje) {
             const texto = encodeURIComponent(`Hola! Te contactamos desde *Mecatrónica Rivarola*. Tu vehículo patente *${patente}* está registrado. Detalle: ${mensaje}`);
-            window.open(`https://wa.me{telefono}?text=${texto}`, '_blank');
-        }
-
-        function imprimirOrden(patente, auto, cliente, falla) {
-            document.getElementById('print-detalle').innerHTML = `<h3>ORDEN DE TRABAJO</h3><p><strong>Fecha:</strong> ${new Date().toLocaleDateString()}</p><p><strong>Cliente:</strong> ${cliente}</p><p><strong>Vehículo:</strong> ${auto} (${patente})</p><p><strong>Falla:</strong> ${falla}</p>`;
-            window.print();
+                    function imprimirOrden(patente, auto, cliente, falla) {
+            const printArea = document.getElementById('print-area');
+            document.getElementById('print-detalle').innerHTML = `
+                <h3>ORDEN DE TRABAJO</h3>
+                <p><strong>Fecha:</strong> ${new Date().toLocaleDateString()}</p>
+                <p><strong>Cliente:</strong> ${cliente}</p>
+                <p><strong>Vehículo:</strong> ${auto} (${patente})</p>
+                <p><strong>Falla:</strong> ${falla}</p>
+            `;
+            
+            printArea.style.setProperty('display', 'block', 'important');
+            setTimeout(() => {
+                window.print();
+            }, 150);
         }
 
         function imprimirPresupuestoDirecto(p) {
-            document.getElementById('print-detalle').innerHTML = `<h3>PRESUPUESTO</h3><p><strong>Fecha:</strong> ${p.fecha}</p><p><strong>Patente:</strong> ${p.patente}</p><p><strong>Trabajo:</strong> ${p.detalle}</p><h2>TOTAL: $${p.total}</h2>`;
-            window.print();
+            const printArea = document.getElementById('print-area');
+            document.getElementById('print-detalle').innerHTML = `
+                <h3>PRESUPUESTO DE REPARACIÓN</h3>
+                <p><strong>Fecha:</strong> ${p.fecha}</p>
+                <p><strong>Patente:</strong> ${p.patente}</p>
+                <p><strong>Trabajo realizado:</strong> ${p.detalle}</p>
+                <br>
+                <h2>TOTAL ESTIMADO: $${p.total}</h2>
+            `;
+            
+            printArea.style.setProperty('display', 'block', 'important');
+            setTimeout(() => {
+                window.print();
+            }, 150);
         }
-    </script>
-</body>
-</html>
