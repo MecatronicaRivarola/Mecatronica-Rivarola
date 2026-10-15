@@ -58,7 +58,7 @@
         </div>
         <div class="nav-buttons">
             <button class="btn-nav active" onclick="switchTab('tab-ingreso')">📥 Ingreso</button>
-            <button class="btn-nav inactive" onclick="switchTab('tab-turnero')">🚗 Turnero Geral</button>
+            <button class="btn-nav inactive" onclick="switchTab('tab-turnero')">🚗 Turnero General</button>
             <button class="btn-nav inactive" onclick="switchTab('tab-presupuestos')">📋 Presupuestos</button>
             <button class="btn-nav inactive" onclick="switchTab('tab-caja')">💰 Control de Caja</button>
         </div>
@@ -122,7 +122,7 @@
                 <h2>📋 Crear Nuevo Presupuesto</h2>
                 <form id="form-presupuesto">
                     <div class="form-group"><label>Patente del Auto</label><input type="text" id="pres-patente" placeholder="ABC 123"></div>
-                    <div class="form-group"><label>Detalle de Trabajos y Repuestos</label><textarea id="pres-detalle" rows="3" placeholder="Ej: Cambio de correa de distribución y tensores..."></textarea></div>
+                    <div class="form-group"><label>Detalle de Trabajos y Repuestos</label><textarea id="pres-detalle" rows="3" placeholder="Ej: Cambio de correa de distribución..."></textarea></div>
                     <div class="form-group grid-2">
                         <div><label>Monto Repuestos ($)</label><input type="number" id="pres-repuestos" value="0"></div>
                         <div><label>Monto Mano de Obra ($)</label><input type="number" id="pres-mano" value="0"></div>
@@ -146,3 +146,143 @@
         <div class="grid-layout" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
             <div class="card-caja"><div>💰 TOTAL RECAUDADO EN SEÑAS</div><div class="monto-grande" id="caja-total">$0</div></div>
             <div class="card-caja"><div>💵 INGRESOS EN EFECTIVO</div><div class="monto-grande" style="color:#34d399;" id="caja-efectivo">$0</div></div>
+            <div class="card-caja"><div>🏦 INGRESOS POR TRANSFERENCIA</div><div class="monto-grande" style="color:#60a5fa;" id="caja-trans">$0</div></div>
+    <div id="print-area" style="display:none;">
+        <div style="text-align:center; border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:20px;">
+            <img src="logo.png" style="width:100px; height:100px;" alt="Logo Taller">
+            <h2>MECATRÓNICA RIVAROLA</h2>
+            <p>Especialistas en Inyección Electrónica y Diagnóstico Computarizado</p>
+        </div>
+        <div id="print-detalle"></div>
+    </div>
+
+    <script>
+        let autosTaller = JSON.parse(localStorage.getItem('mecatronica_autos')) || [
+            { patente: 'AF 789 CD', chasis: 'CH93849201A837', auto: 'Peugeot 208 Sport 2022', cliente: 'Martín Rivarola', tel: '1155551234', falla: 'Falla eléctrica en tablero', repuestos: 'no', seña: 50000, metodo: 'Efectivo', estado: 'En Diagnóstico' }
+        ];
+        let presupuestos = JSON.parse(localStorage.getItem('mecatronica_presupuestos')) || [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            actualizarTablaIngreso();
+            actualizarTurnero();
+            actualizarCaja();
+            actualizarListaPresupuestos();
+        });
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.btn-nav').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('inactive');
+            });
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.remove('inactive');
+            event.currentTarget.classList.add('active');
+        }
+
+        function guardarVehiculo() {
+            const patente = document.getElementById('ins-patente').value.trim().toUpperCase();
+            const chasis = document.getElementById('ins-chasis').value.trim().toUpperCase();
+            const auto = document.getElementById('ins-auto').value.trim();
+            const cliente = document.getElementById('ins-cliente').value.trim();
+            const tel = document.getElementById('ins-tel').value.trim();
+            const falla = document.getElementById('ins-falla').value.trim();
+            const repuestos = document.getElementById('ins-repuestos').value;
+            const seña = parseFloat(document.getElementById('ins-seña').value) || 0;
+            const metodo = document.getElementById('ins-metodo').value;
+
+            if (!patente || !auto || !cliente) {
+                alert('⚠️ Completa los campos obligatorios: Patente, Vehículo y Cliente.');
+                return;
+            }
+
+            autosTaller.push({ patente, chasis, auto, cliente, tel, falla, repuestos, seña, metodo, estado: 'En Taller' });
+            localStorage.setItem('mecatronica_autos', JSON.stringify(autosTaller));
+            document.getElementById('form-ingreso').reset();
+            
+            actualizarTablaIngreso();
+            actualizarTurnero();
+            actualizarCaja();
+            alert('🚀 Vehículo registrado correctamente en la base de datos.');
+        }
+
+        function actualizarTablaIngreso() {
+            const tbody = document.getElementById('tabla-ingreso-body');
+            if (!tbody) return; tbody.innerHTML = '';
+            autosTaller.forEach(item => {
+                tbody.innerHTML += `<tr><td><span class="patente">${item.patente}</span><br><span class="chasis">CH: ${item.chasis||'S/N'}</span></td><td><strong>${item.auto}</strong><br><span class="cliente">${item.cliente}</span></td><td><div>${item.falla}</div></td><td><button class="btn-action btn-print" onclick="imprimirOrden('${item.patente}','${item.auto}','${item.cliente}','${item.falla}')">🖨️ Orden</button><button class="btn-action btn-wa" onclick="enviarWhatsApp('${item.tel}','${item.patente}','${item.falla}')">📱 WA</button></td></tr>`;
+            });
+        }
+
+        function actualizarTurnero() {
+            const tbody = document.getElementById('tabla-turnero-body');
+            if (!tbody) return; tbody.innerHTML = '';
+            autosTaller.forEach((item, index) => {
+                tbody.innerHTML += `<tr><td class="patente">${item.patente}</td><td><strong>${item.auto}</strong><br>${item.cliente}</td><td><select onchange="cambiarEstado(${index},this.value)"><option value="En Taller" ${item.estado==='En Taller'?'selected':''}>En Taller</option><option value="En Diagnóstico" ${item.estado==='En Diagnóstico'?'selected':''}>En Diagnóstico</option><option value="Listo para Entrega" ${item.estado==='Listo para Entrega'?'selected':''}>Listo para Entrega</option></select></td><td><button class="btn-action btn-print" style="background:#991b1b;" onclick="eliminarAuto(${index})">❌ Retirar</button></td></tr>`;
+            });
+        }
+
+        function cambiarEstado(index, nuevoEstado) {
+            autosTaller[index].estado = nuevoEstado;
+            localStorage.setItem('mecatronica_autos', JSON.stringify(autosTaller));
+        }
+
+        function eliminarAuto(index) {
+            if(confirm('¿Confirmas la entrega del vehículo?')) {
+                autosTaller.splice(index, 1);
+                localStorage.setItem('mecatronica_autos', JSON.stringify(autosTaller));
+                actualizarTablaIngreso(); actualizarTurnero(); actualizarCaja();
+            }
+        }
+
+        function generarPresupuesto() {
+            const patente = document.getElementById('pres-patente').value.toUpperCase();
+            const repuestosMonto = parseFloat(document.getElementById('pres-repuestos').value) || 0;
+            const manoObraMonto = parseFloat(document.getElementById('pres-mano').value) || 0;
+            const detalle = document.getElementById('pres-detalle').value;
+            if(!patente) return alert('Introduce una patente');
+            const total = repuestosMonto + manoObraMonto;
+            const nuevoPres = { patente, repuestosMonto, manoObraMonto, detalle, total, fecha: new Date().toLocaleDateString() };
+            presupuestos.push(nuevoPres);
+            localStorage.setItem('mecatronica_presupuestos', JSON.stringify(presupuestos));
+            document.getElementById('form-presupuesto').reset();
+            actualizarListaPresupuestos();
+            imprimirPresupuestoDirecto(nuevoPres);
+        }
+
+        function actualizarListaPresupuestos() {
+            const tbody = document.getElementById('tabla-presupuestos-body');
+            if (!tbody) return; tbody.innerHTML = '';
+            presupuestos.forEach(p => {
+                tbody.innerHTML += `<tr><td class="patente">${p.patente}</td><td>${p.detalle}</td><td>Rep: $${p.repuestosMonto} | MO: $${p.manoObraMonto}</td><td style="color:#f97316;font-weight:bold;">$${p.total}</td></tr>`;
+            });
+        }
+
+        function actualizarCaja() {
+            let total = 0, ef = 0, tr = 0;
+            autosTaller.forEach(item => {
+                total += item.seña;
+                if(item.metodo==='Efectivo') ef += item.seña; else tr += item.seña;
+            });
+            document.getElementById('caja-total').innerText = '\$' + total;
+            document.getElementById('caja-efectivo').innerText = '\$' + ef;
+            document.getElementById('caja-trans').innerText = '\$' + tr;
+        }
+
+        function enviarWhatsApp(telefono, patente, mensaje) {
+            const texto = encodeURIComponent(`Hola! Te contactamos desde *Mecatrónica Rivarola*. Tu vehículo patente *${patente}* está registrado. Detalle: ${mensaje}`);
+            window.open(`https://wa.me{telefono}?text=${texto}`, '_blank');
+        }
+
+        function imprimirOrden(patente, auto, cliente, falla) {
+            document.getElementById('print-detalle').innerHTML = `<h3>ORDEN DE TRABAJO</h3><p><strong>Fecha:</strong> ${new Date().toLocaleDateString()}</p><p><strong>Cliente:</strong> ${cliente}</p><p><strong>Vehículo:</strong> ${auto} (${patente})</p><p><strong>Falla:</strong> ${falla}</p>`;
+            window.print();
+        }
+
+        function imprimirPresupuestoDirecto(p) {
+            document.getElementById('print-detalle').innerHTML = `<h3>PRESUPUESTO</h3><p><strong>Fecha:</strong> ${p.fecha}</p><p><strong>Patente:</strong> ${p.patente}</p><p><strong>Trabajo:</strong> ${p.detalle}</p><h2>TOTAL: $${p.total}</h2>`;
+            window.print();
+        }
+    </script>
+</body>
+</html>
