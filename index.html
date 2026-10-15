@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mecatrónica Rivarola - Sistema Integrado</title>
+    <style>
+        body { background-color: #030712; color: #f3f4f6; font-family: sans-serif; margin: 0; padding-bottom: 4px; }
+        nav { background-color: #111827; padding: 16px; border-bottom: 4px solid #ea580c; display: flex; flex-direction: column; justify-content: space-between; align-items: center; gap: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); }
+        @media (min-width: 768px) { nav { flex-direction: row; } }
+        .logo-container { display: flex; align-items: center; gap: 12px; }
+        .logo-img { width: 50px; height: 50px; object-fit: cover; border-radius: 8px; border: 1px solid #ea580c; }
+        h1 { color: #f97316; font-weight: 900; letter-spacing: 0.1em; margin: 0; font-size: 22px; }
+        .nav-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+        .btn-nav { font-weight: bold; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+        .btn-nav.active { background-color: #ea580c; color: #000; }
+        .btn-nav.inactive { background-color: #1f2937; color: #d1d5db; }
+        .btn-nav:hover { opacity: 0.9; }
+        main { max-width: 1400px; margin: 0 auto; padding: 24px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .grid-layout { display: grid; grid-template-columns: 1fr; gap: 24px; }
+        @media (min-width: 1024px) { .grid-layout { grid-template-columns: 1fr 2fr; } }
+        section { background-color: #111827; padding: 24px; border-radius: 12px; border: 1px solid #1f2937; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); margin-bottom: 24px; }
+        h2 { font-size: 18px; font-weight: bold; margin-top: 0; margin-bottom: 16px; color: #f97316; border-bottom: 1px solid #1f2937; padding-bottom: 8px; }
+        .form-group { margin-bottom: 16px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        label { display: block; font-size: 12px; font-weight: bold; color: #9ca3af; text-transform: uppercase; margin-bottom: 4px; }
+        input, textarea, select { width: 100%; background-color: #030712; border: 1px solid #374151; border-radius: 8px; padding: 8px 12px; color: #fff; box-sizing: border-box; }
+        input:focus, textarea:focus, select:focus { border-color: #f97316; outline: none; }
+        .btn-submit { width: 100%; background-color: #f97316; border: none; color: #000; font-weight: 900; padding: 12px; border-radius: 8px; font-size: 14px; text-transform: uppercase; cursor: pointer; margin-top: 16px; }
+        .box-seña { background-color: #030712; padding: 12px; border-radius: 8px; border: 1px solid #1f2937; margin-top: 16px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { padding: 12px 16px; border-bottom: 1px solid #1f2937; color: #9ca3af; font-size: 12px; text-transform: uppercase; }
+        td { padding: 16px; border-bottom: 1px solid #1f2937; font-size: 14px; }
+        .patente { font-family: monospace; font-weight: bold; color: #f97316; }
+        .btn-action { padding: 6px 12px; border-radius: 6px; border: none; font-size: 12px; font-weight: bold; cursor: pointer; margin-right: 4px; }
+        .btn-print { background-color: #374151; color: #fff; }
+        .btn-wa { background-color: #15803d; color: #fff; }
+        
+        /* Estilos de Impresión para la Orden de Trabajo */
+        @media print {
+            body * { visibility: hidden; }
+            #print-area, #print-area * { visibility: visible; }
+            #print-area { position: absolute; left: 0; top: 0; width: 100%; color: #000; background: #fff; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra de Navegación con LOGO -->
+    <nav>
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+            <h1>⚡ MECATRÓNICA RIVAROLA</h1>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn-nav active" onclick="switchTab('tab-ingreso')">📥 Ingreso</button>
+            <button class="btn-nav inactive" onclick="switchTab('tab-turnero')">🚗 Turnero</button>
+            <button class="btn-nav inactive" onclick="switchTab('tab-presupuestos')">📋 Presupuestos</button>
+            <button class="btn-nav inactive" onclick="switchTab('tab-caja')">💰 Caja</button>
+        </div>
+    </nav>
+
+    <main>
+        <!-- SOLAPA 1: INGRESO -->
+        <div id="tab-ingreso" class="tab-content active grid-layout">
+            <section>
+                <h2>📥 Registro de Ingreso</h2>
+                <form id="form-ingreso">
+                    <div class="form-group grid-2">
+                        <div><label>Patente</label><input type="text" id="ins-patente" placeholder="ABC 123"></div>
+                        <div><label>N° Chasis</label><input type="text" placeholder="17 dígitos"></div>
+                    </div>
+                    <div class="form-group"><label>Marca y Modelo</label><input type="text" id="ins-auto" placeholder="Ford Fiesta 2018"></div>
+                    <div class="form-group grid-2">
+                        <div><label>Cliente</label><input type="text" id="ins-cliente" placeholder="Juan Pérez"></div>
+                        <div><label>Teléfono</label><input type="tel" id="ins-tel" placeholder="1123456789"></div>
+                    </div>
+                    <div class="form-group"><label>Falla / Diagnóstico Inicial</label><textarea id="ins-falla" rows="2" placeholder="Detalle..."></textarea></div>
+                    <div class="box-seña">
+                        <div class="grid-2">
+                            <div><label>Monto Seña ($)</label><input type="number" placeholder="0"></div>
+                            <div><label>Método</label><select><option>Efectivo</option><option>Transferencia</option></select></div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-submit" onclick="alert('Guardado provisorio en pantalla')">🚀 Guardar en Taller</button>
+                </form>
+            </section>
+            
+            <section>
+                <h2>🚗 Vista Rápida del Taller</h2>
+                <table>
+                    <thead><tr><th>Vehículo</th><th>Falla</th><th>Acciones</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="patente">AF 789 CD</span><br>Peugeot 208 - Martín</td>
+                            <td>Falla eléctrica general.</td>
+                            <td>
+                                <button class="btn-action btn-print" onclick="imprimirOrden('AF 789 CD', 'Peugeot 208', 'Martín', 'Falla eléctrica general')">🖨️ Orden</button>
+                                <button class="btn-action btn-wa" onclick="enviarWhatsApp('5491155551234', 'AF 789 CD', 'Orden de trabajo recibida')">📱 Enviar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+
+        <!-- SOLAPA 2: TURNERO -->
+        <div id="tab-turnero" class="tab-content">
+            <section>
+                <h2>🚗 Control de Turnos y Estados</h2>
+                <p>Aquí se listarán todos los autos activos divididos por mecánicos asignados o tiempos de entrega.</p>
+            </section>
+        </div>
+
+        <!-- SOLAPA 3: PRESUPUESTOS -->
+        <div id="tab-presupuestos" class="tab-content">
+            <section style="max-width: 600px;">
+                <h2>📋 Generador de Presupuesto</h2>
+                <div class="form-group"><label>Detalle de Repuestos ($)</label><input type="number" placeholder="Monto repuestos"></div>
+                <div class="form-group"><label>Mano de Obra ($)</label><input type="number" placeholder="Monto trabajo"></div>
+                <button type="button" class="btn-submit" onclick="imprimirOrden('PRESUPUESTO', 'Detalle General', 'Cliente', 'Pendiente de aprobación')">🖨️ Imprimir Presupuesto con Logo</button>
+            </section>
+        </div>
+
+        <!-- SOLAPA 4: CAJA -->
+        <div id="tab-caja" class="tab-content">
+            <section>
+                <h2>💰 Control de Caja Diario</h2>
+                <p>Monto de Señas acumuladas hoy, pagos pendientes de cobro y balances del taller mecánico.</p>
+            </section>
+        </div>
+    </main>
+
+    <!-- Área Oculta para impresión limpia con Logo -->
+    <div id="print-area" style="display:none;">
+        <div style="text-align:center; border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:20px;">
+            <img src="logo.png" style="width:100px; height:100px;" alt="Logo Taller">
+            <h2>MECATRÓNICA RIVAROLA</h2>
+            <p>Especialistas en Inyección Electrónica y Diagnóstico Computarizado</p>
+        </div>
+        <div id="print-detalle"></div>
+    </div>
+
+    <!-- Script de funcionamiento de solapas e interacciones -->
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.btn-nav').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('inactive');
+            });
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.remove('inactive');
+            event.currentTarget.classList.add('active');
+        }
+
+        function enviarWhatsApp(telefono, patente, mensaje) {
+            const texto = encodeURIComponent(`Hola! Te contactamos desde *Mecatrónica Rivarola*. Tu vehículo con patente *${patente}* ya se encuentra en nuestro sistema. Detalle: ${mensaje}`);
