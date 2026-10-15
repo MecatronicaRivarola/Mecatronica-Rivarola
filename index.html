@@ -34,11 +34,22 @@
         .patente { font-family: monospace; font-weight: bold; color: #f97316; font-size: 16px; }
         .chasis { font-size: 11px; color: #6b7280; font-family: monospace; }
         .cliente { font-size: 12px; color: #9ca3af; }
-        .badge-falla { font-size: 11px; background-color: #1e293b; color: #fb923c; padding: 2px 8px; border-radius: 4px; border: 1px solid #334155; display: inline-block; margin-top: 4px; }
-        .btn-action { padding: 6px 12px; border-radius: 6px; border: none; font-size: 12px; font-weight: bold; cursor: pointer; margin-right: 4px; }
-        .btn-print { background-color: #374151; color: #fff; }
-        .btn-wa { background-color: #15803d; color: #fff; }
-        .card-caja { background: #030712; padding: 20px; border-radius: 8px; border: 1px solid #374151; text-align: center; }
+              @media print {
+            /* Oculta absolutamente toda la web negra */
+            body { background: #ffffff !important; color: #000000 !important; }
+            nav, main, form, section, table { display: none !important; }
+            
+            /* Muestra única y perfectamente el ticket limpio */
+            #print-area { display: block !important; visibility: visible !important; position: absolute; left: 0; top: 0; width: 100%; background: #ffffff !important; color: #000000 !important; padding: 10px; font-family: sans-serif; }
+            #print-area * { visibility: visible !important; color: #000000 !important; }
+            
+            /* Estilo del texto del remito */
+            #print-area h2 { color: #000000 !important; border-bottom: 2px solid #000000 !important; margin-top: 10px; padding-bottom: 5px; }
+            #print-area h3 { color: #000000 !important; font-size: 20px; margin-top: 15px; }
+            #print-area p { color: #000000 !important; font-size: 14px; margin: 8px 0; }
+        }
+
+
         .monto-grande { font-size: 28px; font-weight: black; color: #f97316; margin-top: 8px; }
 
         @media print {
